@@ -26,6 +26,26 @@ class Router
  
     }
 
+    public function post(string $url, string $view, ?string $name = null):self
+    
+    {
+
+        $this->router->map('POST', $url, $view, $name);
+
+        return $this;
+
+    }
+
+    public function match(string $url, string $view, ?string $name = null):self
+    
+    {
+
+        $this->router->map('POST|GET', $url, $view, $name);
+
+        return $this;
+
+    }
+
     public function get(string $url, string $view, ?string $name = null):self
     
     {

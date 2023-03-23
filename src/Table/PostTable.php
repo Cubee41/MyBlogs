@@ -3,6 +3,7 @@
 namespace App\Table;
 
 use \PDO;
+use \Exception;
 use App\Model\Post;
 use App\Model\Category;
 use App\PaginatedQuery;
@@ -14,6 +15,17 @@ class PostTable extends Table{
     protected $table = "post";
     protected $class = Post::class;
 
+    public function delete(int $id)
+    {
+
+        $query = $this->pdo->prepare("DELETE FROM {$this->table} WHERE id = ?");
+        $deleted = $query->execute([$id]);
+
+        if($deleted === false){
+            throw new Exception("Impossible de supprimer l'enregistrement $id dans la table {$this->table}");
+        }
+
+    }
     
 
 
@@ -56,6 +68,17 @@ return [$posts, $paginatedQuery];
         return [$posts, $paginatedQuery];
 
 
+    }
+
+    public function update(Post $post):void
+    {
+
+        $query = $this->pdo->prepare("UPDATE {$this->table} SET name = :name WHERE id = :id");
+        $edited = $query->execute([
+            'id' => $post->getID(),
+            'name' => $post->getName()
+        ]);
+        
     }
 
 }
